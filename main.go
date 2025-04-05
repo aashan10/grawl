@@ -1,7 +1,7 @@
 package main
 
 import (
-	"grawl/cmd"
+	"github.com/aashan10/grawl/cmd"
 )
 
 func main() {

@@ -2,8 +2,8 @@ package cmd
 
 import (
 	"fmt"
+	"github.com/aashan10/grawl/internal/crawler"
 	"github.com/spf13/cobra"
-	"grawl/internal/crawler"
 	"os"
 	"sync"
 )
