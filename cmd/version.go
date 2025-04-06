@@ -1,18 +1,19 @@
 package cmd
 
 import (
+	"fmt"
 	"github.com/spf13/cobra"
 )
 
+var Version = "0.1.2"
+
 var versionCmd = &cobra.Command{
 	Use:   "version",
-	Short: "Print the version number of grawl",
-	Long:  `All software has versions. This is grawl's`,
+	Short: "Print the build details for grawl",
 	Run: func(cmd *cobra.Command, args []string) {
-		// Print the version number
-		// This is a placeholder, replace with actual version retrieval logic
-		version := "v0.1.0"
-		println("grawl version:", version)
+
+		fmt.Printf("Grawl version: %s", Version)
+
 	},
 }
 
