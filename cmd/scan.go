@@ -32,7 +32,7 @@ func sitemapWorker(sitemap string, sitemapResult *SitemapResult, wg *sync.WaitGr
 }
 
 var scanCmd = &cobra.Command{
-	Use:   "scan",
+	Use:   "scan <url>",
 	Short: "Scan a sitemap for broken links",
 	Long:  `Scan a sitemap for broken links`,
 	Run: func(cmd *cobra.Command, args []string) {
