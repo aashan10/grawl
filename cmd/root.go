@@ -11,7 +11,7 @@ var rootCmd = &cobra.Command{
 	Short: "A sitemap crawler/page health checker",
 	Long:  `A sitemap crawler/page health checker`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("grawl is a sitemap crawler/page health checker")
+		cmd.Help()
 	},
 }
 

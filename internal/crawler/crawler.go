@@ -53,7 +53,7 @@ func (sr *SitemapResult) GetResults() []PageResult {
 	return sr.results
 }
 
-func Crawl(urls []URL, concurrency int) []PageResult {
+func Crawl(urls []URL, concurrency int, skipCertCheck bool) []PageResult {
 
 	var wg sync.WaitGroup
 
@@ -67,7 +67,8 @@ func Crawl(urls []URL, concurrency int) []PageResult {
 			defer wg.Done()
 
 			for url := range jobs {
-				response, err := http.Get(url.Loc)
+				client := GetClient(skipCertCheck)
+				response, err := client.Get(url.Loc)
 
 				result := PageResult{
 					URL: url.Loc,

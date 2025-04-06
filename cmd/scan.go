@@ -13,9 +13,12 @@ type SitemapResult struct {
 	mutex sync.Mutex
 }
 
-func sitemapWorker(sitemap string, sitemapResult *SitemapResult, wg *sync.WaitGroup) {
+var concurrency int
+var skipCertcheck bool
+
+func sitemapWorker(sitemap string, sitemapResult *SitemapResult, wg *sync.WaitGroup, skipCertcheck bool) {
 	defer wg.Done()
-	urls, err := crawler.FetchSitemap(sitemap)
+	urls, err := crawler.FetchSitemap(sitemap, skipCertcheck)
 
 	if err != nil {
 		fmt.Println("Error fetching sitemap:", err)
@@ -42,7 +45,7 @@ var scanCmd = &cobra.Command{
 
 		entrypoint := args[0]
 
-		sitemaps, err := crawler.FetchSitemaps(entrypoint)
+		sitemaps, err := crawler.FetchSitemaps(entrypoint, skipCertcheck)
 
 		if err != nil {
 			cmd.Println("Error fetching sitemaps:", err)
@@ -55,7 +58,7 @@ var scanCmd = &cobra.Command{
 
 		for _, sitemap := range sitemaps {
 			wg.Add(1)
-			go sitemapWorker(sitemap, &sitemapResult, &wg)
+			go sitemapWorker(sitemap, &sitemapResult, &wg, skipCertcheck)
 		}
 		wg.Wait()
 
@@ -65,7 +68,7 @@ var scanCmd = &cobra.Command{
 			cmd.Println("No URLs found in the sitemaps.")
 			os.Exit(1)
 		}
-		result := crawler.Crawl(sitemapResult.URLs, 12)
+		result := crawler.Crawl(sitemapResult.URLs, concurrency, skipCertcheck)
 
 		for _, page := range result {
 			if page.Error != nil {
@@ -80,5 +83,7 @@ var scanCmd = &cobra.Command{
 
 func init() {
 
+	scanCmd.Flags().IntVarP(&concurrency, "concurrency", "c", 12, "Number of concurrent requests")
+	scanCmd.Flags().BoolVarP(&skipCertcheck, "skip-cert-check", "k", false, "Skip SSL certificate verification")
 	rootCmd.AddCommand(scanCmd)
 }

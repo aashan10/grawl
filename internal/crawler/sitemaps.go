@@ -28,8 +28,9 @@ type URLSet struct {
 	URLs    []URL    `xml:"url"`
 }
 
-func FetchSitemaps(url string) ([]string, error) {
-	resp, err := http.Get(url)
+func FetchSitemaps(url string, skipCertCheck bool) ([]string, error) {
+	client := GetClient(skipCertCheck)
+	resp, err := client.Get(url)
 	if err != nil {
 		return nil, err
 	}
@@ -61,8 +62,9 @@ func FetchSitemaps(url string) ([]string, error) {
 	return urls, nil
 }
 
-func FetchSitemap(url string) (URLSet, error) {
-	resp, err := http.Get(url)
+func FetchSitemap(url string, skipCertCheck bool) (URLSet, error) {
+	client := GetClient(skipCertCheck)
+	resp, err := client.Get(url)
 
 	if err != nil {
 		return URLSet{}, err
